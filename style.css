@@ -1,0 +1,311 @@
+/* Basic cinematic look - flat file version */
+:root{
+  --ui-bg: rgba(0,0,0,0.62);
+  --accent: #e1e1e1;
+  --accent-2: #b3b3b3;
+  --text: #f4f4f4;
+  --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, Apple Color Emoji, Segoe UI Emoji;
+}
+
+*{ box-sizing:border-box; }
+html,body{ margin:0; height:100%; background:#000; color:var(--text); font-family:var(--font); }
+#game{ position:relative; width:100%; height:100vh; overflow:hidden; }
+
+#bg{
+  position:absolute; inset:0;
+  background:#000 center/cover no-repeat;
+  filter:brightness(0.85) contrast(1.05);
+  transition: background-image 400ms ease;
+}
+
+#babe{
+  position:absolute; bottom:0; left:50%;
+  transform:translateX(-50%) translateY(8%);
+  max-height:92vh; width:auto;
+  image-rendering:auto;
+  filter:drop-shadow(0 30px 60px rgba(0,0,0,0.8));
+  opacity:0; transition:opacity 300ms ease, transform 500ms ease;
+}
+
+#letterbox-top,#letterbox-bottom{
+  position:absolute; left:0; right:0; height:9vh; background:#000;
+  z-index:3; opacity:0.9;
+}
+#letterbox-top{ top:0; }
+#letterbox-bottom{ bottom:0; }
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+ 
+
+
+
+.btn.primary{ background:rgba(255,255,255,0.08); border-color:rgba(255,255,255,0.35); }
+.hidden{ display:none; }
+
+#overlay{
+  position:absolute; inset:0; background:rgba(0,0,0,0.7);
+  display:grid; place-items:center;
+  z-index:6;
+}
+#overlay::before{
+  content:"";
+  position:absolute; inset:0;
+  background:url('blood_overlay.png') center/cover no-repeat;
+  mix-blend-mode:screen; opacity:0.6; animation:pulse 1400ms ease-in-out infinite alternate;
+}
+@keyframes pulse{
+  from{ opacity:0.4; } to{ opacity:0.75; }
+}
+#overlayText{
+  z-index:2;
+  font-size: clamp(36px, 5vw, 64px);
+  font-weight:800;
+  letter-spacing:2px;
+  text-shadow:0 2px 0 rgba(0,0,0,0.65);
+}
+#restart{ z-index:2; margin-top:16px; }
+
+#tapHint{
+  position:absolute; right:14px; bottom:14px; z-index:5;
+  font-size:12px; color:var(--accent-2); opacity:0.75;
+}
+
+@media (max-width: 780px){
+  #babe{ transform:translateX(-50%) translateY(6%); max-height:76vh; }
+  #letterbox-top,#letterbox-bottom{ height:7vh; }
+}
+
+
+/* Ensure overlay can actually be hidden despite #overlay rule specificity */
+#overlay.hidden{ display:none !important; }
+
+
+/* Subtle random light flicker */
+@keyframes flickerPulse{
+  0%{ filter:brightness(0.82) contrast(1.06); }
+  50%{ filter:brightness(0.76) contrast(1.10); }
+  100%{ filter:brightness(0.86) contrast(1.05); }
+}
+#bg.flicker{ animation: flickerPulse 180ms steps(2,end) 1; }
+
+
+/* Nora final pose tuning (handled mostly in JS with inline transform) */
+
+
+/* Gun & muzzle */
+#gun, #muzzle{
+  position:absolute; bottom:0; right:0;
+  max-height:52vh; width:auto; pointer-events:none; z-index:5;
+  opacity:0; transform: translateY(40%) translateX(10%) rotate(-2deg);
+  filter: drop-shadow(0 8px 20px rgba(0,0,0,0.7));
+}
+#muzzle{
+  max-height:26vh; right:16vw; bottom:34vh; opacity:0;
+  transform: scale(0.8);
+}
+.gun-in{ opacity:1 !important; transform: translateY(0) translateX(0) rotate(0deg); transition: transform 220ms ease, opacity 140ms ease; }
+.gun-recoil{ transform: translateY(3%) translateX(-1%) rotate(-4deg) !important; transition: transform 60ms ease; }
+.flash-on{ opacity:1 !important; transition: opacity 40ms ease; }
+.flash-off{ opacity:0 !important; transition: opacity 120ms ease; }
+
+
+/* Final Nora size/position */
+#babe.nora-final {
+  position: absolute !important;
+  bottom: 22vh !important;
+  left: 50% !important;
+  transform: translateX(-50%) scale(2.1) !important;
+  max-height: 70vh !important;
+  z-index: 20 !important;
+  pointer-events: none;
+}
+
+
+/* === Nora Final: independent scaling & placement === */
+#noraFinal{
+  position:absolute !important;
+  left:50% !important;
+  bottom:20vh !important;                 /* raise above textbox */
+  transform:translateX(-50%) !important;
+  width:65vw !important;                  /* large and responsive */
+  height:auto !important;
+  max-height:72vh !important;
+  z-index:4 !important;
+  pointer-events:none !important;
+  opacity:1 !important;
+}
+@media (max-width: 480px){ #noraFinal{ width:72vw !important; bottom:18vh !important; } }
+
+
+/* Ensure dialog box overlays character sprites */
+#dialog, .dialog, #message, #hud, 
+
+
+
+
+/* Keep overlays above character sprites */
+#ui, 
+
+#ui * { pointer-events:auto; }
+
+
+/* ===== Fix: ensure gun & muzzle render above UI during firing ===== */
+.gun-top { z-index: 60 !important; }
+
+/* ===== Visual: e-girl red flash when hit ===== */
+.egirl-hit { 
+  animation: egirlRedFlash 0.18s linear 3;
+}
+@keyframes egirlRedFlash {
+  0%, 100% { filter: none; }
+  50% { filter: sepia(1) hue-rotate(-50deg) saturate(6) brightness(1.25); }
+}
+
+
+/* ===== Position: raise gun higher during firing ===== */
+
+
+
+
+
+
+/* ===== Mask underlying extra rounded UI by drawing a clean UI plate under textbox ===== */
+/* ensure the pseudo won't show on very small screens where layout differs */
+@media (max-width:420px){
+  }
+
+
+/* ===== Align gun bottom to textbox bottom during firing ===== */
+#gun.gun-in, #muzzle.gun-top, #muzzle.flash-on {
+  bottom: calc(env(safe-area-inset-bottom,0) + max(1.6vh,12px));
+  transform: translateX(0) rotate(-2deg) !important; /* keep horizontal alignment when raised */
+  max-height:48vh;
+}
+#gun.gun-in.gun-recoil {
+  bottom: calc(env(safe-area-inset-bottom,0) + max(1.6vh,12px) + 6px);
+  transform: translateX(-4px) rotate(-4deg) !important;
+}
+
+/* UI cleanup */
+
+
+
+/* ==== Release Candidate Glass UI (RC3) ==== */
+:root{
+  --ui-bg: rgba(10,10,14,0.58);
+  --ui-border: rgba(255,255,255,0.14);
+  --ui-ring: rgba(255,255,255,0.22);
+  --ui-shadow: rgba(0,0,0,0.45);
+  --blur: 14px;
+  --radius: 20px;
+  --pad: clamp(12px, 2.3vw, 18px);
+  --btn-bg: rgba(255,255,255,0.08);
+  --btn-bg-hover: rgba(255,255,255,0.14);
+  --btn-ring: rgba(255,255,255,0.28);
+}
+
+#ui{
+  position: fixed; left: 0; right: 0; bottom: 0;
+  display: block;
+  pointer-events: none;
+  z-index: 40;
+}
+
+#textbox{
+  position: fixed;
+  left: 5vw;
+  bottom: calc(env(safe-area-inset-bottom,0) + max(1.6vh,12px));
+  width: min(86vw, 820px);
+  background: var(--ui-bg);
+  border: 1px solid var(--ui-border);
+  border-radius: var(--radius);
+  padding: var(--pad);
+  box-shadow: 0 14px 34px var(--ui-shadow);
+  backdrop-filter: blur(var(--blur)) saturate(1.1);
+  -webkit-backdrop-filter: blur(var(--blur)) saturate(1.1);
+  pointer-events: auto;
+}
+#textbox::before{
+  content:""; position:absolute; left:0; right:0; top:0; height:46%;
+  background: linear-gradient(180deg, rgba(255,255,255,0.15), rgba(255,255,255,0));
+  border-top-left-radius: var(--radius); border-top-right-radius: var(--radius);
+  border-bottom-left-radius: calc(var(--radius) - 6px); border-bottom-right-radius: calc(var(--radius) - 6px);
+  pointer-events:none;
+}
+#textbox::after{
+  content:""; position:absolute; inset:0; border-radius: var(--radius);
+  box-shadow: inset 0 0 0 0.5px var(--ui-ring); pointer-events:none;
+}
+
+#name{ font-weight:700; letter-spacing:0.4px; color: rgba(255,255,255,0.85); margin-bottom:6px; }
+#text{ font-size: clamp(16px, 2.2vw, 22px); line-height:1.45; text-shadow:0 1px 0 rgba(0,0,0,0.35); min-height:2.7lh; }
+#choices{ display:flex; gap:10px; margin-top:12px; flex-wrap:wrap; align-items:center; }
+
+.btn{
+  pointer-events:auto; background: var(--btn-bg);
+  border: 1px solid rgba(255,255,255,0.22);
+  border-radius: 999px;
+  padding: clamp(10px, 1.8vw, 12px) clamp(14px, 2.6vw, 18px);
+  font-size: clamp(14px, 1.8vw, 16px); color: #f6f6f6;
+  text-shadow: 0 1px 0 rgba(0,0,0,0.25);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.28);
+  transition: transform 120ms ease, background 120ms ease, box-shadow 120ms ease, border-color 120ms ease;
+}
+.btn:hover{ background: var(--btn-bg-hover); border-color: var(--btn-ring); box-shadow: 0 8px 20px rgba(0,0,0,0.4); }
+.btn:active{ transform: translateY(1px) scale(0.99); }
+.btn:focus-visible{ outline: 2px solid rgba(255,255,255,0.35); outline-offset: 2px; }
+
+/* Ensure UI overlays sprites, gun can go above UI during firing */
+#ui, #textbox { z-index: 40 !important; }
+.gun-top { z-index: 60 !important; }
+
+/* Raise standard sprites so UI doesn't cover them */
+#babe{
+  position:absolute; left:50%;
+  bottom:18vh;
+  transform:translateX(-50%);
+  width:65vw; height:auto; max-height:72vh;
+  pointer-events:none; z-index:4;
+}
+@media (max-width:480px){ #babe{ width:72vw; bottom:20vh; } }
+
+/* red hit flash helper */
+.egirl-hit { animation: egirlRedFlash 0.18s linear 3; }
+@keyframes egirlRedFlash {
+  0%,100%{ filter:none; } 50%{ filter: sepia(1) hue-rotate(-50deg) saturate(6) brightness(1.25); }
+}
+
+
+/* ====== Start Screen Overlay ====== */
+#startScreen{
+  position:fixed; inset:0; z-index:100;
+  background: url('start.jpg') center/cover no-repeat, #000;
+  display:grid; place-items:end center;
+  padding-bottom: clamp(14vh, 18vh, 22vh);
+}
+#startBtn{
+  appearance:none; -webkit-appearance:none;
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.28);
+  color:#f6f6f6;
+  font-size: clamp(18px, 5vw, 24px);
+  padding: 14px 28px;
+  border-radius: 999px;
+  box-shadow: 0 14px 34px rgba(0,0,0,0.45);
+  backdrop-filter: blur(10px) saturate(1.1);
+  -webkit-backdrop-filter: blur(10px) saturate(1.1);
+  cursor:pointer;
+}
+#startBtn:hover{ background: rgba(255,255,255,0.16); }
+#startBtn:active{ transform: translateY(1px); }

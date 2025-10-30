@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Analog Horror: House of Echoes</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="startScreen" aria-hidden="false">
+    <button id="startBtn" type="button">Start</button>
+  </div>
+
+  <div id="game">
+    <div id="bg"></div>
+    <img id="babe" alt="character" />
+    <img id="noraFinal" alt="nora-final" style="display:none;" />
+    <img id="gun" alt="gun" />
+    <img id="muzzle" alt="flash" />
+    <div id="letterbox-top"></div>
+    <div id="letterbox-bottom"></div>
+
+    <div id="ui">
+      <div id="textbox">
+        <div id="name"></div>
+        <div id="text" aria-live="polite"></div>
+        <div id="choices" class="hidden">
+          <button id="choiceA" class="btn"></button>
+          <button id="choiceB" class="btn"></button>
+        </div>
+      </div>
+    </div>
+
+    <div id="overlay" class="hidden">
+      <div id="overlayText">You are dead.</div>
+      <button id="restart" class="btn">Restart</button>
+    </div>
+
+    <div id="tapHint">Tap to advance</div>
+  </div>
+
+  <script>
+    const GAME_DATA = [
+      {
+        roomId: 1,
+        name: "Mia",
+        bg: "room1.png",
+        sprite: "Mia.png",
+        lines: [
+          { line: "Hey… over here.", a: "Keep walking", b: "Walk toward her" },
+          { line: "Been waiting for you. Don’t be shy.", a: "Step back", b: "Step closer" },
+          { line: "I want all of you, daddy—right now.", a: "Not interested", b: "Let’s talk…" }
+        ]
+      },
+      {
+        roomId: 2,
+        name: "Alice",
+        bg: "room2.png",
+        sprite: "Alice.png",
+        lines: [
+          { line: "Hello again. You kept me waiting.", a: "Keep your distance", b: "I’m listening" },
+          { line: "Close the door… we’ll have some privacy.", a: "Leave it open", b: "Close it" },
+          { line: "Come press yourself between these curves; don’t make me ask twice.", a: "No thanks", b: "Convince me" }
+        ]
+      },
+      {
+        roomId: 3,
+        name: "Nora",
+        bg: "room3.png",
+        sprite: "Nora.png",
+        lines: [
+          { line: "You made it all the way to me.", a: "Wrong turn", b: "Couldn’t resist" },
+          { line: "Tell me what you want.", a: "I want out", b: "You" },
+          { line: "Come here, pretty boy—let me take you in.", a: "Stay put", b: "Come closer" }
+        ]
+      }
+    ];
+  </script>
+  <script src="game.js"></script>
+</body>
+</html>
